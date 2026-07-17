@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const pathways = [
+  {
+    index: '01',
+    cmd: './software',
+    title: 'Software & Bots',
+    blurb: 'Automation, tooling, and the occasional chatbot with too much personality.',
+    href: '/projects',
+    accent: 'text-emerald-400',
+    glow: 'group-hover:shadow-emerald-400/10',
+    external: false,
+  },
+  {
+    index: '02',
+    cmd: './darkroom',
+    title: 'Photography — The Darkroom',
+    blurb: 'Portraits, streets, and light experiments, developed in the digital dark.',
+    href: '/photography',
+    accent: 'text-sky-400',
+    glow: 'group-hover:shadow-sky-400/10',
+    external: false,
+  },
+  {
+    index: '03',
+    cmd: './coursework',
+    title: 'Academic / Coursework',
+    blurb: 'Class projects, labs, and notes — hosted on the jinfusion-edu org.',
+    href: 'https://jinfusion-edu.github.io',
+    accent: 'text-violet-400',
+    glow: 'group-hover:shadow-violet-400/10',
+    external: true,
+  },
+];
+---
+
+<Layout title="jinfusion · lobby" description="jinfusion.dev — select a destination: software & bots, photography, or academic coursework.">
+  <main class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-6 py-20">
+    <!-- Terminal header -->
+    <header class="mb-12">
+      <div class="mb-8 flex items-center gap-2" aria-hidden="true">
+        <span class="h-3 w-3 rounded-full bg-zinc-800"></span>
+        <span class="h-3 w-3 rounded-full bg-zinc-800"></span>
+        <span class="h-3 w-3 rounded-full bg-zinc-800"></span>
+        <span class="ml-3 font-mono text-xs text-zinc-600">jinfusion@dev — lobby</span>
+      </div>
+
+      <p class="font-mono text-sm leading-relaxed text-zinc-500">
+        <span class="text-emerald-400">jinfusion@dev</span><span class="text-zinc-600">:~$</span>
+        whoami
+      </p>
+      <h1 class="mt-3 text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl">
+        jinfusion
+      </h1>
+      <p class="mt-4 max-w-xl text-lg leading-relaxed">
+        Developer &amp; photographer. This is the lobby — pick a door.
+      </p>
+      <p class="mt-6 font-mono text-sm text-zinc-500">
+        <span class="text-emerald-400">jinfusion@dev</span><span class="text-zinc-600">:~$</span>
+        select_destination
+        <span class="ml-1 inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-zinc-400" aria-hidden="true"></span>
+      </p>
+    </header>
+
+    <!-- Pathways -->
+    <nav class="flex flex-col gap-4" aria-label="Site sections">
+      {
+        pathways.map((p) => (
+          <a
+            href={p.href}
+            target={p.external ? '_blank' : undefined}
+            rel={p.external ? 'noopener' : undefined}
+            class:list={[
+              'group flex items-baseline gap-5 rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6',
+              'transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-zinc-900 hover:shadow-xl',
+              p.glow,
+            ]}
+          >
+            <span class="font-mono text-xs text-zinc-600 transition-colors duration-300 group-hover:text-zinc-400">
+              [{p.index}]
+            </span>
+            <span class="flex-1">
+              <span class="flex flex-wrap items-baseline gap-x-3">
+                <span class:list={['font-mono text-sm', p.accent]}>{p.cmd}</span>
+                <span class="text-lg font-semibold text-zinc-100 transition-colors duration-300 group-hover:text-white">
+                  {p.title}
+                </span>
+                {p.external && (
+                  <span class="font-mono text-[11px] uppercase tracking-widest text-zinc-600">external ↗</span>
+                )}
+              </span>
+              <span class="mt-1.5 block text-sm leading-relaxed text-zinc-400">{p.blurb}</span>
+            </span>
+            <span
+              class="font-mono text-zinc-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-zinc-200"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Footer -->
+    <footer class="mt-16 flex flex-col items-start justify-between gap-3 border-t border-zinc-800/60 pt-8 font-mono text-xs text-zinc-600 sm:flex-row sm:items-center">
+      <p>
+        <span class="text-zinc-500">// commissions &amp; inquiries:</span>
+        <a
+          href="mailto:commissions@jinfusion.dev"
+          class="ml-1 text-zinc-400 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:text-zinc-100 hover:decoration-zinc-400"
+        >
+          commissions@jinfusion.dev
+        </a>
+      </p>
+      <a
+        href="https://github.com/jinfusion88"
+        target="_blank"
+        rel="noopener"
+        class="text-zinc-500 transition-colors duration-300 hover:text-zinc-200"
+      >
+        github.com/jinfusion88
+      </a>
+    </footer>
+  </main>
+</Layout>

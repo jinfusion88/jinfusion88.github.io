@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+/**
+ * THE DARKROOM — how to add photos:
+ *
+ * 1. Drop your raw image files (JPG/PNG/WebP, full resolution is fine) into:
+ *        src/assets/photography/
+ * 2. That's it. The glob below picks them up automatically, and Astro's
+ *    <Image /> component optimizes each one at build time (resized,
+ *    compressed, converted to WebP, with width/height set to prevent
+ *    layout shift). Never put gallery photos in /public — files there
+ *    skip Astro's optimization pipeline entirely.
+ *
+ * Files are sorted by filename, so prefix with numbers to control order:
+ *    01-golden-hour.jpg, 02-street-kyoto.jpg, ...
+ */
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/photography/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true }
+);
+
+const photos = Object.entries(modules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, mod]) => ({
+    src: mod.default,
+    // "01-golden-hour.jpg" → "golden hour" (used for alt text; rename
+    // files descriptively or replace this with a proper caption map)
+    alt: (path.split('/').pop() ?? '')
+      .replace(/\.[^.]+$/, '')
+      .replace(/^\d+[-_]?/, '')
+      .replace(/[-_]+/g, ' '),
+  }));
+---
+
+<Layout title="jinfusion · the darkroom" description="Photography by jinfusion — portraits, streets, and light experiments.">
+  <main class="mx-auto max-w-6xl px-6 py-16">
+    <header class="mb-12">
+      <a
+        href="/"
+        class="font-mono text-sm text-zinc-500 transition-colors duration-300 hover:text-zinc-200"
+      >
+        ← cd ~/lobby
+      </a>
+      <h1 class="mt-6 text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl">
+        The Darkroom
+      </h1>
+      <p class="mt-4 max-w-xl text-lg leading-relaxed text-zinc-400">
+        Photographs, developed in the digital dark. Prints and commissions via
+        <a
+          href="mailto:commissions@jinfusion.dev"
+          class="text-zinc-200 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:decoration-zinc-300"
+        >
+          commissions@jinfusion.dev</a
+        >.
+      </p>
+    </header>
+
+    {
+      photos.length > 0 ? (
+        <div class="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
+          {photos.map((photo) => (
+            <figure class="group break-inside-avoid overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-900/50 transition-all duration-300 hover:border-zinc-600">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                widths={[480, 800, 1200]}
+                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                class="w-full transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            </figure>
+          ))}
+        </div>
+      ) : (
+        <div class="rounded-xl border border-dashed border-zinc-800 p-12 text-center">
+          <p class="font-mono text-sm text-zinc-500">// darkroom is empty</p>
+          <p class="mx-auto mt-3 max-w-md text-sm leading-relaxed text-zinc-400">
+            Drop image files into <code class="rounded bg-zinc-900 px-1.5 py-0.5 font-mono text-xs text-zinc-300">src/assets/photography/</code>
+            and rebuild — they'll appear here automatically, optimized by Astro.
+          </p>
+        </div>
+      )
+    }
+  </main>
+</Layout>
