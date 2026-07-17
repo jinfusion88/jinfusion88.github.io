@@ -1,5 +1,8 @@
 # build output
 dist/
+
+# full-resolution photo originals (web-sized copies live in src/assets/photography)
+photo-originals/
 # generated types
 .astro/
 
