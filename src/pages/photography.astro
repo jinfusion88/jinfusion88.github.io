@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Email from '../components/Email.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -48,11 +49,10 @@ const photos = Object.entries(modules)
         The Darkroom
       </h1>
       <p class="mt-4 max-w-xl text-lg leading-relaxed text-zinc-400">
-        Photographs, developed in the digital dark. Prints and commissions via <a
-          href="mailto:commissions@jinfusion.dev"
+        Photographs, developed in the digital dark. Prints and commissions via <Email
+          user="commissions"
           class="text-zinc-200 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:decoration-zinc-300"
-          >commissions@jinfusion.dev</a
-        >.
+        />.
       </p>
     </header>
 

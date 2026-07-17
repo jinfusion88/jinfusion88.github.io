@@ -1,0 +1,30 @@
+---
+// Renders an email link WITHOUT the full address appearing in the static
+// HTML, so Cloudflare's Email Address Obfuscation (and scrapers) never
+// match it — visitors otherwise see "[email protected]" after
+// view-transition navigations. JS assembles the real mailto on load and
+// after every ClientRouter navigation; no-JS visitors see "user [at] domain".
+interface Props {
+  user: string;
+  domain?: string;
+  class?: string;
+}
+
+const { user, domain = 'jinfusion.dev', class: className } = Astro.props;
+---
+
+<a class={className} data-eml-user={user} data-eml-domain={domain}>{user} [at] {domain}</a>
+
+<script>
+  function assembleEmails() {
+    document.querySelectorAll<HTMLAnchorElement>('a[data-eml-user]').forEach((a) => {
+      const user = a.dataset.emlUser;
+      const domain = a.dataset.emlDomain;
+      if (!user || !domain) return;
+      const address = user + '@' + domain;
+      a.href = 'mailto:' + address;
+      a.textContent = address;
+    });
+  }
+  document.addEventListener('astro:page-load', assembleEmails);
+</script>

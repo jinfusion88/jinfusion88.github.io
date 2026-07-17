@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Email from '../components/Email.astro';
 
 const projects = [
   {
@@ -33,11 +34,10 @@ const projects = [
       Software &amp; Bots
     </h1>
     <p class="mt-4 max-w-xl text-lg leading-relaxed text-zinc-400">
-      Discord bots and tooling, built in public. Custom bot work is open — commissions via <a
-        href="mailto:commissions@jinfusion.dev"
+      Discord bots and tooling, built in public. Custom bot work is open — commissions via <Email
+        user="commissions"
         class="text-zinc-200 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:decoration-zinc-300"
-        >commissions@jinfusion.dev</a
-      >.
+      />.
     </p>
 
     <div class="mt-12 flex flex-col gap-5">

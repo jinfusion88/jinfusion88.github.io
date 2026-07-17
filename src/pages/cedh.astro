@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Email from '../components/Email.astro';
 
 const destinations = [
   {
@@ -42,7 +43,11 @@ const destinations = [
     </h1>
     <p class="mt-4 max-w-xl text-lg leading-relaxed text-zinc-400">
       Competitive Commander, taken apart on camera and rebuilt card by card.
-      Videos, lists, and the running commentary live here:
+      Videos, lists, and the running commentary live here. Collabs and
+      inquiries via <Email
+        user="cedh"
+        class="text-zinc-200 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:decoration-zinc-300"
+      />.
     </p>
 
     <div class="mt-12 flex flex-col gap-5">
