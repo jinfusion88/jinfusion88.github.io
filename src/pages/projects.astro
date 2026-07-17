@@ -1,8 +1,27 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const projects = [
+  {
+    name: 'crownwatch',
+    tag: 'discord bot · python',
+    blurb:
+      'cEDH King-of-the-Hill title-tracking Discord bot with a life-total economy, rivalry tracking, defense streaks, decklist history, and bounties.',
+    href: 'https://github.com/jinfusion88/crownwatch',
+    accent: 'text-amber-400',
+  },
+  {
+    name: 'Herald',
+    tag: 'discord bot · python',
+    blurb:
+      'Forum-digest bot (forum-digest-bot) that surfaces conversations members missed: a twice-weekly "Featured Discussions" digest of active threads — never a leaderboard — plus quiet, delayed notices for new threads.',
+    href: 'https://github.com/jinfusion88/forum-digest-bot',
+    accent: 'text-sky-400',
+  },
+];
 ---
 
-<Layout title="jinfusion · software & bots" description="Software projects and bots by jinfusion.">
+<Layout title="jinfusion · software & bots" description="Software projects and Discord bots by jinfusion — crownwatch and Herald.">
   <main class="mx-auto max-w-3xl px-6 py-16">
     <a
       href="/"
@@ -14,19 +33,45 @@ import Layout from '../layouts/Layout.astro';
       Software &amp; Bots
     </h1>
     <p class="mt-4 max-w-xl text-lg leading-relaxed text-zinc-400">
-      Project cards land here next. For now, the source lives on
-      <a
-        href="https://github.com/jinfusion88"
-        target="_blank"
-        rel="noopener"
+      Discord bots and tooling, built in public. Custom bot work is open — commissions via <a
+        href="mailto:commissions@jinfusion.dev"
         class="text-zinc-200 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:decoration-zinc-300"
-      >
-        github.com/jinfusion88</a
+        >commissions@jinfusion.dev</a
       >.
     </p>
 
-    <div class="mt-12 rounded-xl border border-dashed border-zinc-800 p-12 text-center">
-      <p class="font-mono text-sm text-zinc-500">// deploys in progress…</p>
+    <div class="mt-12 flex flex-col gap-5">
+      {
+        projects.map((p) => (
+          <a
+            href={p.href}
+            target="_blank"
+            rel="noopener"
+            class="group rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-zinc-900 hover:shadow-xl"
+          >
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <span class="flex items-baseline gap-3">
+                <span class:list={['font-mono text-lg font-semibold', p.accent]}>{p.name}</span>
+                <span class="font-mono text-[11px] uppercase tracking-widest text-zinc-600">{p.tag}</span>
+              </span>
+              <span class="font-mono text-xs text-zinc-600 transition-colors duration-300 group-hover:text-zinc-300">
+                github ↗
+              </span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-zinc-400">{p.blurb}</p>
+          </a>
+        ))
+      }
     </div>
+
+    <p class="mt-10 font-mono text-xs text-zinc-600">
+      // more repos at <a
+        href="https://github.com/jinfusion88"
+        target="_blank"
+        rel="noopener"
+        class="text-zinc-400 transition-colors duration-300 hover:text-zinc-100"
+        >github.com/jinfusion88</a
+      >
+    </p>
   </main>
 </Layout>

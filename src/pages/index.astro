@@ -24,6 +24,16 @@ const pathways = [
   },
   {
     index: '03',
+    cmd: './cedh',
+    title: 'cEDH — Content & Decklists',
+    blurb: 'Strategy videos, tournament decklists, and where to find me on socials.',
+    href: '/cedh',
+    accent: 'text-amber-400',
+    glow: 'group-hover:shadow-amber-400/10',
+    external: false,
+  },
+  {
+    index: '04',
     cmd: './coursework',
     title: 'Academic / Coursework',
     blurb: 'Class projects, labs, and notes — hosted on the jinfusion-edu org.',
@@ -35,7 +45,7 @@ const pathways = [
 ];
 ---
 
-<Layout title="jinfusion · lobby" description="jinfusion.dev — select a destination: software & bots, photography, or academic coursework.">
+<Layout title="jinfusion · lobby" description="jinfusion.dev — code, content, cameras: Discord bots, cEDH strategy, photography, and academic coursework.">
   <main class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-6 py-20">
     <!-- Terminal header -->
     <header class="mb-12">
@@ -47,18 +57,17 @@ const pathways = [
       </div>
 
       <p class="font-mono text-sm leading-relaxed text-zinc-500">
-        <span class="text-emerald-400">jinfusion@dev</span><span class="text-zinc-600">:~$</span>
-        whoami
+        <span class="text-emerald-400">jinfusion@dev</span><span class="text-zinc-600">:~$</span> whoami
       </p>
       <h1 class="mt-3 text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl">
-        jinfusion
+        Code. Content. Cameras.
       </h1>
       <p class="mt-4 max-w-xl text-lg leading-relaxed">
-        Developer &amp; photographer. This is the lobby — pick a door.
+        From Discord bot commissions and cEDH strategy to high-end photography
+        portfolios. You have reached the central hub.
       </p>
       <p class="mt-6 font-mono text-sm text-zinc-500">
-        <span class="text-emerald-400">jinfusion@dev</span><span class="text-zinc-600">:~$</span>
-        select_destination
+        <span class="text-emerald-400">jinfusion@dev</span><span class="text-zinc-600">:~$</span> select_destination
         <span class="ml-1 inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-zinc-400" aria-hidden="true"></span>
       </p>
     </header>
