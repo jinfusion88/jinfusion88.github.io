@@ -21,8 +21,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload site
         uses: withastro/action@v3
-        # Defaults: root project dir, auto-detected package manager,
-        # output uploaded from ./dist as the Pages artifact.
+        with:
+          # Astro 5 requires Node >=22.12; the action defaults to Node 20
+          node-version: 22
 
   deploy:
     needs: build
