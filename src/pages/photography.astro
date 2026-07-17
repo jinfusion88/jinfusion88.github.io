@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Email from '../components/Email.astro';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 /**
@@ -23,17 +23,25 @@ const modules = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
-const photos = Object.entries(modules)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([path, mod]) => ({
-    src: mod.default,
-    // "01-golden-hour.jpg" → "golden hour" (used for alt text; rename
-    // files descriptively or replace this with a proper caption map)
-    alt: (path.split('/').pop() ?? '')
-      .replace(/\.[^.]+$/, '')
-      .replace(/^\d+[-_]?/, '')
-      .replace(/[-_]+/g, ' '),
-  }));
+const photos = await Promise.all(
+  Object.entries(modules)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(async ([path, mod]) => ({
+      src: mod.default,
+      // Larger rendition served by the click-to-expand lightbox
+      full: await getImage({
+        src: mod.default,
+        width: Math.min(2560, mod.default.width),
+        format: 'webp',
+      }),
+      // "01-golden-hour.jpg" → "golden hour" (used for alt text; rename
+      // files descriptively or replace this with a proper caption map)
+      alt: (path.split('/').pop() ?? '')
+        .replace(/\.[^.]+$/, '')
+        .replace(/^\d+[-_]?/, '')
+        .replace(/[-_]+/g, ' '),
+    }))
+);
 ---
 
 <Layout title="jinfusion · the darkroom" description="Photography by jinfusion — portraits, streets, and light experiments.">
@@ -61,13 +69,22 @@ const photos = Object.entries(modules)
         <div class="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
           {photos.map((photo) => (
             <figure class="group break-inside-avoid overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-900/50 transition-all duration-300 hover:border-zinc-600">
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                widths={[480, 800, 1200]}
-                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                class="w-full transition-transform duration-500 group-hover:scale-[1.02]"
-              />
+              <button
+                type="button"
+                data-lightbox-trigger
+                data-full={photo.full.src}
+                data-alt={photo.alt}
+                class="block w-full cursor-zoom-in"
+                aria-label={`View ${photo.alt || 'photo'} full size`}
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  widths={[480, 800, 1200]}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  class="w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </button>
             </figure>
           ))}
         </div>
@@ -81,5 +98,101 @@ const photos = Object.entries(modules)
         </div>
       )
     }
+
+    {
+      photos.length > 0 && (
+        <dialog
+          id="lightbox"
+          class="m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-0 backdrop:bg-zinc-950/95"
+        >
+          <div class="flex h-full w-full flex-col items-center justify-center gap-5 p-4 sm:p-8">
+            <img
+              data-lightbox-img
+              class="max-h-[82dvh] max-w-full rounded-lg object-contain shadow-2xl"
+              alt=""
+            />
+            <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs">
+              <button
+                type="button"
+                data-lightbox-prev
+                class="text-zinc-400 transition-colors duration-300 hover:text-zinc-100"
+              >
+                ← prev
+              </button>
+              <p data-lightbox-counter class="text-zinc-600" aria-live="polite"></p>
+              <button
+                type="button"
+                data-lightbox-next
+                class="text-zinc-400 transition-colors duration-300 hover:text-zinc-100"
+              >
+                next →
+              </button>
+              <button
+                type="button"
+                data-lightbox-close
+                class="text-zinc-500 transition-colors duration-300 hover:text-zinc-100"
+              >
+                [esc] close
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )
+    }
   </main>
 </Layout>
+
+<script>
+  function getDialog() {
+    return document.querySelector<HTMLDialogElement>('#lightbox');
+  }
+
+  function getTriggers() {
+    return [...document.querySelectorAll<HTMLElement>('[data-lightbox-trigger]')];
+  }
+
+  function render(i: number) {
+    const dialog = getDialog();
+    const triggers = getTriggers();
+    if (!dialog || triggers.length === 0) return;
+    const n = ((i % triggers.length) + triggers.length) % triggers.length;
+    dialog.dataset.index = String(n);
+    const trigger = triggers[n];
+    const img = dialog.querySelector<HTMLImageElement>('[data-lightbox-img]');
+    const counter = dialog.querySelector('[data-lightbox-counter]');
+    if (img) {
+      img.src = trigger.dataset.full ?? '';
+      img.alt = trigger.dataset.alt ?? '';
+    }
+    if (counter) counter.textContent = `// ${n + 1} of ${triggers.length}`;
+  }
+
+  function step(delta: number) {
+    const dialog = getDialog();
+    if (!dialog?.open) return;
+    render(Number(dialog.dataset.index ?? 0) + delta);
+  }
+
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+    const trigger = el.closest<HTMLElement>('[data-lightbox-trigger]');
+    if (trigger) {
+      render(getTriggers().indexOf(trigger));
+      getDialog()?.showModal();
+      return;
+    }
+    if (el.closest('[data-lightbox-prev]')) return step(-1);
+    if (el.closest('[data-lightbox-next]')) return step(1);
+    if (el.closest('[data-lightbox-close]')) return getDialog()?.close();
+    // Click on the empty area around the photo closes the lightbox; the
+    // flex wrapper fills the dialog, so any non-child target is backdrop.
+    const dialog = getDialog();
+    if (dialog?.open && (el === dialog || el.parentElement === dialog)) dialog.close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!getDialog()?.open) return;
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+</script>
