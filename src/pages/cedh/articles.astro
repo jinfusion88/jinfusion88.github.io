@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Email from '../../components/Email.astro';
+
+const articles = [
+  {
+    title: 'The Ghost-Spider Codex',
+    date: 'Jul 2026',
+    tag: 'deck engineering',
+    blurb:
+      'Six builds, ten months, one commander. The documented path from borrowed slop through an asymmetric prison to a sticky Jenga lattice — with an interactive web you can try to sever, and the math that shows what actually changed.',
+    href: '/cedh/articles/ghost-spider-codex/',
+    accent: 'text-rose-400',
+    glow: 'group-hover:shadow-rose-400/10',
+  },
+];
+---
+
+<Layout
+  title="jinfusion · cEDH articles"
+  description="cEDH articles and deck-engineering writeups by jinfusion — starting with the Ghost-Spider Codex."
+>
+  <main class="mx-auto max-w-3xl px-6 py-16">
+    <a
+      href="/cedh"
+      class="font-mono text-sm text-zinc-500 transition-colors duration-300 hover:text-zinc-200"
+    >
+      ← cd ~/cedh
+    </a>
+    <h1 class="mt-6 text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl">
+      Articles
+    </h1>
+    <p class="mt-4 max-w-xl text-lg leading-relaxed text-zinc-400">
+      Long-form deck engineering: build journals, brewing theory, and the math
+      behind the lists. Topic requests via <Email
+        user="cedh"
+        class="text-zinc-200 underline decoration-zinc-700 underline-offset-4 transition-colors duration-300 hover:decoration-zinc-300"
+      />.
+    </p>
+
+    <div class="mt-12 flex flex-col gap-5">
+      {
+        articles.map((a) => (
+          <a
+            href={a.href}
+            data-astro-reload
+            class:list={[
+              'group rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-6',
+              'transition-all duration-300 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-zinc-900 hover:shadow-xl',
+              a.glow,
+            ]}
+          >
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <span class="flex flex-wrap items-baseline gap-x-3">
+                <span class:list={['text-lg font-semibold', a.accent]}>{a.title}</span>
+                <span class="font-mono text-[11px] uppercase tracking-widest text-zinc-600">{a.tag}</span>
+              </span>
+              <span class="font-mono text-xs text-zinc-600 transition-all duration-300 group-hover:translate-x-1 group-hover:text-zinc-200">
+                {a.date} →
+              </span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-zinc-400">{a.blurb}</p>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>

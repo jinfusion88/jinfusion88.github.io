@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Ghost-Spider Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0e0b16; --panel:#161028; --panel2:#1c1533; --ink:#f1ecfa; --dim:#9a90b8;
+  --pink:#ff2e88; --cyan:#3fd9ea; --violet:#8a7bd8; --line:#2b2246;
+  --ok:#63e6a4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif;line-height:1.62;font-size:16px;
+  background-image:radial-gradient(circle at 15% 8%, rgba(255,46,136,.07), transparent 42%),radial-gradient(circle at 85% 30%, rgba(63,217,234,.06), transparent 45%);}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+.mono{font-family:'JetBrains Mono',monospace}
+h1,h2,h3{font-family:'Unbounded',sans-serif;line-height:1.15}
+a{color:var(--cyan)}
+/* ---------- hero ---------- */
+header{padding:64px 0 44px;position:relative;overflow:hidden}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+h1{font-size:clamp(30px,8vw,52px);font-weight:900}
+h1 .gw{color:var(--pink)}
+.thesis{margin-top:18px;color:var(--dim);font-size:17px;max-width:56ch}
+.thesis b{color:var(--ink)}
+.webbg{position:absolute;right:-70px;top:-40px;width:300px;height:300px;opacity:.16;pointer-events:none}
+.dl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--cyan);letter-spacing:.04em}
+.dl:hover{color:var(--pink);border-color:var(--pink)}
+/* ---------- sections ---------- */
+section{padding:44px 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(20px,5vw,28px);font-weight:700;margin-bottom:6px}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink);margin-bottom:10px}
+.lede{color:var(--dim);margin-bottom:26px;max-width:60ch}
+/* ---------- timeline ---------- */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;
+  background:repeating-linear-gradient(180deg,var(--line) 0 10px,transparent 10px 16px)}
+.stop{position:relative;margin-bottom:30px}
+.stop::before{content:"";position:absolute;left:-24px;top:7px;width:12px;height:12px;border-radius:50%;
+  background:var(--night);border:2px solid var(--cyan)}
+.stop.final::before{border-color:var(--pink);box-shadow:0 0 12px rgba(255,46,136,.6)}
+.when{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:.14em;text-transform:uppercase}
+.stop.final .when{color:var(--pink)}
+.stop h3{font-size:18px;margin:4px 0 6px;font-weight:700}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:2px 8px;border:1px solid var(--line);border-radius:99px;color:var(--dim);margin:0 6px 8px 0}
+.stop p{color:var(--dim);font-size:15px}
+.stop p b{color:var(--ink);font-weight:600}
+.kept{margin-top:8px;font-size:13.5px}
+.kept span{color:var(--ok)}
+/* ---------- doctrine ---------- */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h3{font-size:14px;margin-bottom:8px}
+.card h3.j{color:var(--pink)} .card h3.s{color:var(--cyan)}
+.card p{font-size:14px;color:var(--dim)}
+.card p b{color:var(--ink)}
+.wide{grid-column:1/-1}
+/* ---------- lattice ---------- */
+.latwrap{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 12px 18px;margin-top:8px}
+.lathead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:0 6px 10px}
+.counter{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--dim)}
+.counter b{color:var(--pink);font-size:15px}
+.counter .liv{color:var(--cyan)}
+button.reset{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;background:none;border:1px solid var(--line);color:var(--dim);border-radius:99px;padding:6px 14px;cursor:pointer}
+button.reset:hover,button.reset:focus-visible{border-color:var(--cyan);color:var(--cyan);outline:none}
+#web{width:100%;height:auto;display:block;touch-action:manipulation}
+.node{cursor:pointer}
+.node circle{fill:var(--panel2);stroke:var(--violet);stroke-width:1.4;transition:all .18s}
+.node.lyn circle{stroke:var(--pink)}
+.node.cmd circle{fill:#241040;stroke:var(--pink);stroke-width:2.4}
+.node text{fill:var(--ink);font-family:'JetBrains Mono',monospace;font-size:9.5px;text-anchor:middle;pointer-events:none}
+.node .sub{fill:var(--dim);font-size:8px}
+.node.dead circle{fill:#0c0913;stroke:#4a3f66;stroke-dasharray:3 3}
+.node.dead text{fill:#5c5378;text-decoration:line-through}
+.edge{fill:none;stroke-width:1.2;opacity:.5;transition:opacity .18s}
+.edge.route{stroke:var(--pink)}
+.edge.tut{stroke:var(--cyan);stroke-dasharray:4 4}
+.edge.cln{stroke:var(--violet);stroke-dasharray:1.5 3.5}
+.edge.off{opacity:.07}
+.routes{display:grid;gap:8px;margin-top:14px}
+.rt{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:13.5px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.rt.live .dot{background:var(--pink);box-shadow:0 0 8px rgba(255,46,136,.7)}
+.rt.lat .dot{background:var(--cyan);box-shadow:0 0 8px rgba(63,217,234,.6)}
+.rt.sev .dot{background:#4a3f66}
+.rt.sev{color:#6b6188}
+.rt .st{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.rt.live .st{color:var(--pink)} .rt.lat .st{color:var(--cyan)} .rt.sev .st{color:#4a3f66}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding:0 4px;font-size:12px;color:var(--dim)}
+.legend i{display:inline-block;width:18px;height:0;border-top:2px solid;margin-right:6px;vertical-align:middle}
+.fn{font-size:12.5px;color:var(--dim);margin-top:12px;padding:0 4px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#241040;border:1px solid var(--pink);color:var(--ink);
+  padding:10px 18px;border-radius:99px;font-size:13.5px;opacity:0;pointer-events:none;transition:all .28s;z-index:9}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ---------- math ---------- */
+.formula{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:10px;
+  padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;overflow-x:auto;white-space:pre;color:var(--ink);margin:14px 0}
+.formula .c{color:var(--dim)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0}
+th{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:left;padding:8px 8px;border-bottom:1px solid var(--line)}
+td{padding:8px;border-bottom:1px solid var(--line)}
+td.n{font-family:'JetBrains Mono',monospace}
+tr.hl td{color:var(--pink);font-weight:600}
+.delta-up{color:var(--ok)} .delta-flat{color:var(--dim)} .delta-big{color:var(--pink);font-weight:600}
+.callout{background:linear-gradient(135deg,rgba(255,46,136,.1),rgba(63,217,234,.08));border:1px solid var(--line);border-radius:14px;padding:18px;margin:18px 0}
+.callout p{font-size:14.5px;color:var(--ink)}
+h3.mh{font-size:15px;margin:26px 0 4px;color:var(--cyan)}
+p.mx{font-size:14.5px;color:var(--dim)}
+p.mx b{color:var(--ink)}
+/* ---------- ledger ---------- */
+.ledger{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:6px}
+.lcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12.5px}
+.lcard .nm{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink)}
+.lcard .vd{color:var(--ok);font-size:10.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.08em}
+.lcard p{color:var(--dim);font-size:11.5px;margin-top:3px;line-height:1.45}
+.wish{margin-top:20px}
+.wish .rt{border-left:3px solid var(--cyan)}
+footer{padding:40px 0 70px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
+footer .mono{color:var(--pink)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <svg class="webbg" viewBox="0 0 200 200" aria-hidden="true">
+    <g stroke="#ff2e88" fill="none" stroke-width="1">
+      <circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="60"/><circle cx="100" cy="100" r="90"/>
+      <path d="M100 10 V190 M10 100 H190 M36 36 L164 164 M164 36 L36 164"/>
+    </g>
+  </svg>
+  <div class="eyebrow">cEDH deck engineering · Jul 2026</div>
+  <h1>THE <span class="gw">GHOST&#8209;SPIDER</span> CODEX</h1>
+  <p class="thesis">How my pile became a web. Six builds, ten months, one commander. This is my documented path from <b>borrowed slop</b> through an <b>asymmetric prison</b> to a <b>sticky Jenga lattice</b>, with the math that shows what actually changed along the way.</p>
+  <p style="margin-top:14px"><a class="dl" href="https://moxfield.com/decks/wQQmV9YgzUiUecNElfOGUA" target="_blank" rel="noopener">Spider Farm · the current list on Moxfield ↗</a></p>
+</header>
+
+<!-- ======================= DOCTRINE ======================= -->
+<section id="doctrine">
+  <div class="kicker">Part I</div>
+  <h2>The Doctrine</h2>
+  <p class="lede">The vocabulary I steered this whole project by.</p>
+  <div class="grid2">
+    <div class="card"><h3 class="j">JENGA</h3><p>Linear, synergy dense towers that win fast and fall to one pulled block. Typically comes with Speed and a high ceiling, Typically highly fragile, in other words a glass cannon. <b>My v1 ran four of them at once. Vadrok distilled the storm version.</b></p></div>
+    <div class="card"><h3 class="s">SLOP</h3><p>High floor piles of good stuff. Card quality over synergy, nothing individually load bearing. Resilient and grindy, with a capped ceiling. <b>The Twinning lives here, and so does the Rhystic slop meta at large.</b></p></div>
+    <div class="card wide"><h3>LEGACY JESKAI CONTROL: THE ARMOR</h3><p>The constructed form in which I tried to actually come from,. Legacy's WUR control shells: Swords, dense cheap countermagic, maindeck Pyroblast culture, and winning on card quality plus inevitability. (yup it has it all) KeepSeven's Jeskai Control tournament report on Eternal Durdles is the reference I keep coming back to. My Rhystic, Sentinel, Remora, and hatebear layer is that lineage in 99 card form. It is the <b>armor</b>, not the sword. The pointed inheritance note: Legacy Jeskai runs on Brainstorm and Ponder velocity, the one organ I refused to grow for ten months.</p></div>
+    <div class="card wide"><h3 style="color:var(--pink)">STICKY JENGA <span style="color:var(--dim);font-weight:400">(the target)</span></h3><p>Fast <b>and</b> consistent <b>and</b> resilient, where the resilience is <b>structural</b> instead of borrowed from card quality (v1) or lockout (v2). Shared blocks across routes, tutors and clones as spare parts, recursion as a second act, and an outlet in the command zone that nobody can remove. A tower that stays up while blocks are being pulled.</p></div>
+  </div>
+</section>
+
+<!-- ======================= JOURNEY ======================= -->
+<section id="journey">
+  <div class="kicker">Part II</div>
+  <h2>The Journey</h2>
+  <p class="lede">Six builds across three shells. Each one taught me something the next one kept, and the discard pile of ideas mattered as much as the keeps.</p>
+
+  <div class="tl">
+    <div class="stop">
+      <div class="when">Sep 2025 · v1 Gwen</div>
+      <h3>The Slop Pile With Four Towers</h3>
+      <span class="tag">Slop chassis</span><span class="tag">4 disjoint Jenga packages</span><span class="tag">Gwen was colors only</span>
+      <p>I started with premium Jeskai good stuff: One Ring, Urza's Saga, Teferi, Intuition, Spellseeker. The result; I ended up carrying four combos that shared almost nothing. Breach with LED, Scepter with Reversal, Dualcaster with Twinflame, Kitten with Teferi. I paid the Jenga tax four times without Jenga's payoff density, and my commander was purely decorative. All in all I Excellent floor, but  an unfocused ceiling. When I played it posted respectable games I had presence, but never could close anything out, and never felt like it could.</p>
+      <p class="kept"><span>Kept forward:</span> the Breach and Scepter cores, the free counter shield, the fetch dual skeleton.</p>
+      <p style="margin-top:6px"><a class="dl" href="https://moxfield.com/decks/cT87duXNPkOO-gQlVJKwdA" target="_blank" rel="noopener">Ghost Storm · v1 on Moxfield ↗</a></p>
+    </div>
+
+    <div class="stop">
+      <div class="when">Feb 2026 · v2 Gwen</div>
+      <h3>The Asymmetric Prison</h3>
+      <span class="tag">Exile-stax</span><span class="tag">First Gwen-weaponized build</span><span class="tag">Self-hosing</span>
+      <p>The most conceptually interesting list I have made, and the one I underrated in my own memory. Knowledge Pool, Uba Mask, Memory Jar, Tangle Wire: the first build where exile mattered, because exile prison  setup converts the whole table's resource flow into the one zone (exile) only my commander profited from this, without her on the board I was a duck in the water. Wprse yet cards like Uba mask hosed me several times. Uba  would blank my own banked interaction,  Vexing Bauble would turned off my own free interaction. Overall the list was High concept, but filled with internal contradiction.</p>
+      <p class="kept"><span>Kept forward:</span> Hexing Squelcher, Voice of Victory, the thesis that Gwen should be load bearing. <b>Buried:</b> symmetric prison.</p>
+      <p style="margin-top:6px"><a class="dl" href="https://moxfield.com/decks/R8RQ52iVmE-a_s65-5mpNg" target="_blank" rel="noopener">This deck is breaking my back...get it · v2 on Moxfield ↗</a></p>
+    </div>
+
+    <div class="stop">
+      <div class="when">Side-lab A · "The Twinning"</div>
+      <h3>The Slop-Control Laboratory (WU)</h3>
+      <span class="tag">Rhystic Slop</span><span class="tag">Legacy-control DNA</span><span class="tag">Connective-tissue vault</span>
+      <p>Alisaie and Alphinaud running my pure value and hatebear plan: Timetwister, One Ring, Saga, Drannith, Lavinia, the Recruiter toolbox. This is where my grind DNA lives,  and I love it! The Legacy control philosophy incarnate, but in EDH form. Premium removal, cheap countermagic, individually powerful cards, and inevitability (Though way too slow for the current meta)! It also quietly warehoused everything v3 Gwen later needed During our self reflection: Spellseeker, Intuition, Floodcaller, Aven Interrupter.</p>
+      <p class="kept"><span>Kept forward:</span> proof that my interaction suite wins grinds, and validated Spellseeker's line map in our lattice web.</p>
+      <p style="margin-top:6px"><a class="dl" href="https://moxfield.com/decks/1cDRq1UoVka6sIDEBX78XA" target="_blank" rel="noopener">The Twinning on Moxfield ↗</a></p>
+    </div>
+
+    <div class="stop">
+      <div class="when">Side-lab B · "Apex Jeskai"</div>
+      <h3>The Storm-Recursion Laboratory (WUR)</h3>
+      <span class="tag">Turbo Jenga</span><span class="tag">Graveyard = second hand</span>
+      <p>Vadrok inherited v1's twin combo and ritual suite, and taught me the second act lesson: a commander that recasts cheap spells from the yard means the first answered Breach is never the last. This is exactly why Shiko reads differently to me than to a netdecker, and will either be brewed or incorporated into Gwen. We only got a few games in on vadrok before the cat was inevitability packed up. </p>
+      <p class="kept"><span>Kept forward:</span> recursion as resilience, Mistrise and Timetwister tech notes, respect for burst mana density.</p>
+      <p style="margin-top:6px"><a class="dl" href="https://moxfield.com/decks/WRLHpDz-Y0KXOseztbZ2wA" target="_blank" rel="noopener">Fullmetal Mutate: Brotherhood of the Breach · Vadrok on Moxfield ↗</a></p>
+    </div>
+
+    <div class="stop">
+      <div class="when">Jul 2026 · v3 Gwen</div>
+      <h3>The Lattice Thesis</h3>
+      <span class="tag">Jenga engine, Slop armor</span><span class="tag">Exile-matters</span>
+      <p>The rebuild: Nico, Hex Magic, Moogle chains, clone redundancy (a lot of clones), and the centerpiece: Scepter copies are <b>cast from exile</b>, so my commander converts infinite mana into playing the deck. Every card In this itiration was starting to hold a load when challenged. Peacemaker aged Remoras and feeds counters. Bribery steals slop or an opponent's Thoracle at zero library. Firestorm is board control that loops into a kill...etc</p>
+      <p class="kept"><span>Kept forward:</span> everything. This was the first version where cuts required an argument.</p>
+    </div>
+
+    <div class="stop final">
+      <div class="when">Now · Final Form</div>
+      <h3>Sticky Jenga</h3>
+      <span class="tag">99 earned slots</span><span class="tag">5 consistency grafts</span><span class="tag">1 payoff benched</span>
+      <p>Six grafts Came about after review of our journey and our self reflective brewing: Brainstorm, Muddle the mixture,  plus Grinding Station, Spellseeker, then Intuition and Urza's Saga off the wish list, against a single benched payoff in Nico. Muddle reaches four lynchpins. Station is tutorable three ways. Five clone effects are universal spare parts, and the one block no opponent can permanently remove, my commander, sits at the center as the outlet. The review ended the only way a finished list can: every slot earning its place with a named role.</p>
+      <p style="margin-top:6px"><a class="dl" href="https://moxfield.com/decks/wQQmV9YgzUiUecNElfOGUA" target="_blank" rel="noopener">Spider Farm | Sticky Jenga | Self-reflective brew · the current list ↗</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= MIRROR ======================= -->
+<section id="mirror">
+  <div class="kicker">Part III</div>
+  <h2>The Mirror: Self-Reflective Brewing</h2>
+  <p class="lede">Before touching the lattice (web) or the math, I ran the lens that changed the most decisions: comparing this deck not to other Gwen lists but to the rest of my own roster, because the <b>"brewer stays constant" ~ThunderConductor</b>. I placed my Current Three active decks, all local top 4s at my LGS's in Yakima, Washington, held up to the light against Gwen: <a class="dl" href="https://moxfield.com/decks/hSgoDboWSUm_gWqAp0B2Hg" target="_blank" rel="noopener">Scion of the Ur-Dragon ↗</a> (5c turbo Breach), <a class="dl" href="https://moxfield.com/decks/ge9VYiATiEK0LyhFf_5ZNw" target="_blank" rel="noopener">Jin Sakai ↗</a> (Esper midrange control), and <a class="dl" href="https://moxfield.com/decks/818gkkSIeEeDE4sRA_02iQ" target="_blank" rel="noopener">Terra, Magical Adept ↗</a> (5c Breach reanimator).</p>
+
+  <h3 class="mh">My fingerprint: cards in 3+ of the 4 decks</h3>
+  <p class="mx mono" style="font-size:12.5px;line-height:2">An Offer You Can't Refuse · Borne Upon a Wind · Silence · Swan Song · Flusterstorm · Force of Will · Pact of Negation · Mental Misstep · Mindbreak Trap · Esper Sentinel · Mystic Remora · Rhystic Study · Enlightened Tutor · Sol Ring · Mana Vault · Chrome Mox · Mox Diamond · Mana Confluence · City of Brass · Ancient Tomb · Gemstone Caverns · Flash Photography · Sevinne's Reclamation · Hexing Squelcher · Voice of Victory · Ragavan · Smothering Tithe · Starting Town</p>
+  <p class="mx">That list is me, not any commander. Dense free and one mana stack interaction, Silence effects on the win turn, taxing hatebears, enchantment engines, a clone somewhere, and Sevinne's as my recursion of choice. Every deck I build is the same animal, turbo-consistent combo with midrange adaptability, wearing different colors.</p>
+
+  <h3 class="mh">Role mapping: how my roster's slots express themselves in Jeskai</h3>
+  <table>
+    <thead><tr><th>Roster constant (Scion / Jin / Terra)</th><th>Gwen v3.2 expression</th></tr></thead>
+    <tbody>
+      <tr><td>Demonic Consultation / Tainted Pact into Thassa's Oracle</td><td class="n">Loop to zero library, then Bribery an opponent's Oracle</td></tr>
+      <tr><td>Vampiric / Imperial / Demonic tutor spine (8 to 10 per deck)</td><td class="n">Muddle · Spellseeker · Intuition · Saga · Gamble · Gifts</td></tr>
+      <tr><td>Necropotence / Ad Nauseam refuel</td><td class="n">Wheel · Jeska's Will · Hex Magic · Rhystic engines</td></tr>
+      <tr><td>Dark Ritual / Cabal / Culling ritual suite (5 to 6 per black deck)</td><td class="n">Jeska's Will · Simian Spirit Guide, <b>thinnest in the roster</b></td></tr>
+      <tr><td>Underworld Breach (Scion, Terra)</td><td class="n">Underworld Breach, the one mega-combo constant across all my colors</td></tr>
+      <tr><td>Saw in Half / Flash Photography copy value</td><td class="n">The five-clone spare-parts bay</td></tr>
+      <tr><td>Opposition Agent / Lavinia / Dauthi stax bears (Jin)</td><td class="n">Voice of Victory · Hexing Squelcher · Peacemaker · Ranger-Captain</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout"><p><b>Finding 1: my Bribery tech I realized was DNA, not typical jinfusion jank.</b> All three roster decks win through Consult and Oracle in black. Gwen is my only deck without black, and I rebuilt my home win axis anyway. Loop to an empty library, then Bribery the table's Oracle. Comparing my own decks validated what outside comparison called a pet card.</p></div>
+  <div class="callout"><p><b>Finding 2: my cantrip blind spot has a root cause.</b> Zero cheap cantrips in Scion. Zero in Terra. Top only in Jin. I buy consistency with black tutor density, which is correct in black. I carried that heuristic into the one deck whose colors can't match black's tutor quality, then under-compensated with selection for ten months. Not a Gwen bug. A habit of mine meeting the one deck it doesn't fit. And the Legacy Jeskai lineage this deck claims is defined by the Brainstorm and Ponder engine. The ancestor demands the organ I skipped.</p></div>
+  <div class="callout"><p><b>Finding 3: the ritual gap, same story.</b> Every black deck I run has five or six rituals. Gwen runs two burst spells while wanting turbo pacing. My next experiment queue: one or two red rituals (both lived in Vadrok) versus one more cantrip. Testable, cheap, reversible.</p></div>
+
+  <h3 class="mh">The three-pillar audit</h3>
+  <div class="grid2">
+    <div class="card"><h3 class="s">PILLAR 1 · SELF</h3><p>Done above. My constants identified, two divergences (selection, rituals) named with root causes, and one former "pet card" reclassified as DNA.</p></div>
+    <div class="card"><h3 class="s">PILLAR 2 · ARCHETYPE</h3><p>The commander dictates the axis. Gwen's is the exile engine, and it stays primary. The warning I take from my own roster: over-importing Scion's habits builds a worse Scion, not a better Gwen. The Oracle heist stays <b>backup</b>, never the plan.</p></div>
+    <div class="card"><h3 class="j">PILLAR 3 · META</h3><p>The asymmetry I have to respect: all three of my black decks run Orcish Bowmasters. Gwen can't, and fields my softest board against it (Gwen 2/1, Sentinel, Ragavan, Spellseeker). Sequencing discipline in Bowmasters pods is my reps priority, and it is Solitude's strongest argument.</p></div>
+  </div>
+</section>
+
+
+<section id="lattice">
+  <div class="kicker">Part IV · The Signature Test</div>
+  <h2>The Lattice (The Web): Snap Test</h2>
+  <p class="lede">This is my stability demonstration. <b>Tap any card to answer it</b> (tap again to restore) and watch the routes reroute through tutors, clones, and recursion. Try to sever all five.</p>
+
+  <div class="latwrap">
+    <div class="lathead">
+      <div class="counter">answers spent <b id="spent">0</b> · routes standing <b class="liv" id="alive">5</b>/5</div>
+      <button class="reset" id="reset">RESET WEB</button>
+    </div>
+    <svg id="web" viewBox="0 0 700 720" role="img" aria-label="Interactive lattice map of the deck's win routes"></svg>
+    <div class="legend">
+      <span><i style="border-color:var(--pink)"></i>route thread</span>
+      <span><i style="border-color:var(--cyan);border-top-style:dashed"></i>tutor reach</span>
+      <span><i style="border-color:var(--violet);border-top-style:dotted"></i>clone / recursion</span>
+    </div>
+    <div class="routes" id="routes"></div>
+    <p class="fn">Honesty footnote: clone spare parts assume the original resolved at least once before being answered, and Sevinne's recursion covers destroyed permanents at MV 3 or less. The commander node cannot be permanently answered. She returns to the command zone, which is the structural heart of the whole design.</p>
+  </div>
+</section>
+
+
+<section id="math">
+  <div class="kicker">Part V</div>
+  <h2>The Math</h2>
+  <p class="lede">Hypergeometric analysis across all five lists, with formulas shown, work shown, and my honest reading of what moved and what didn't.</p>
+
+  <h3 class="mh">The base formula</h3>
+  <p class="mx">Every probability below is drawn without replacement from a 99 card deck. For a category of <b>K</b> relevant cards seen over <b>n</b> draws:</p>
+  <div class="formula">P(X ≥ 1) = 1 − C(N−K, n) / C(N, n)        <span class="c">N = 99</span>
+
+<span class="c">Worked example, my final list, ≥1 interaction in the opener (K=19, n=7):</span>
+P = 1 − C(80,7)/C(99,7)
+  = 1 − 3,176,716,400 / 15,094,376,275
+  = 1 − 0.2105 = <b>0.787  →  78.7%</b></div>
+
+  <h3 class="mh">Consistency across versions</h3>
+  <p class="mx">Opener means 7 cards. "By T3" means 10 cards seen, on the draw with no engines. Categories: fast mana and rituals · sub-2-MV selection · unconditional tutors · interaction.</p>
+  <table>
+    <thead><tr><th>List</th><th>Fast mana, opener</th><th>Selection, T3</th><th>Tutor, T3</th><th>Interaction, opener</th></tr></thead>
+    <tbody>
+      <tr><td>v1 Gwen</td><td class="n">53.7%</td><td class="n">19.3%</td><td class="n">53.7%</td><td class="n">76.6%</td></tr>
+      <tr><td>v2 Gwen</td><td class="n">45.6%</td><td class="n">19.3%</td><td class="n">58.7%</td><td class="n">76.6%</td></tr>
+      <tr><td>Twinning</td><td class="n">57.4%</td><td class="n">27.6%</td><td class="n">53.7%</td><td class="n">74.5%</td></tr>
+      <tr><td>Vadrok</td><td class="n">60.7%</td><td class="n">27.6%</td><td class="n">48.1%</td><td class="n">74.5%</td></tr>
+      <tr><td>v3.1 Gwen</td><td class="n">57.4%</td><td class="n">19.3%</td><td class="n">58.7%</td><td class="n">78.7%</td></tr>
+      <tr class="hl"><td>v3.2, post-review</td><td class="n">57.4%</td><td class="n">19.3%</td><td class="n">67.4%</td><td class="n">78.7%</td></tr>
+    </tbody>
+  </table>
+  <p class="mx">Deltas v1 → v3.2: fast mana <span class="delta-up">+3.7pts</span> · tutors <span class="delta-big">+13.7pts</span> (Intuition and Saga land the biggest single-review jump on my record) · interaction <span class="delta-up">+2.1pts</span> (best of all six) · raw selection <span class="delta-flat">flat at 19.3%</span>, my documented residual weakness. Two cheap cantrips is still two. I compensate with commander impulse, Hex Magic, and wheels rather than raw cheap dig.</p>
+
+  <h3 class="mh">Two-card assembly: the Dramatic Scepter line</h3>
+  <p class="mx">The proper model splits access into <b>a</b> for Scepter-specific sources, <b>b</b> for Reversal-specific sources, and <b>w</b> for wildcard tutors that fetch either half, each wildcard filling one missing half. Success over n cards is the multivariate hypergeometric sum:</p>
+  <div class="formula">P(assemble) = Σ  [ C(a,i)·C(b,j)·C(w,k)·C(N−a−b−w, n−i−j−k) ] / C(N,n)
+  over all (i,j,k) with:  (i≥1 ∧ j≥1) ∨ (i=0 ∧ j≥1 ∧ k≥1)
+                        ∨ (i≥1 ∧ j=0 ∧ k≥1) ∨ (i=0 ∧ j=0 ∧ k≥2)
+
+<span class="c">v3.2 list: a=4 {Scepter, Enl. Tutor, Moogle, Urza's Saga} · b=3 {Reversal,
+Mys. Tutor, Spellseeker} · w=4 {Gamble, Gifts, Muddle, Intuition}</span></div>
+  <table>
+    <thead><tr><th>List</th><th>n=10 (T3)</th><th>n=13 (T5)</th><th>n=16 (T7)</th></tr></thead>
+    <tbody>
+      <tr><td>v1 Gwen</td><td class="n">19.4%</td><td class="n">29.4%</td><td class="n">39.5%</td></tr>
+      <tr><td>v2 Gwen</td><td class="n">21.1%</td><td class="n">31.5%</td><td class="n">41.9%</td></tr>
+      <tr><td>v3.1 Gwen</td><td class="n">19.4%</td><td class="n">29.4%</td><td class="n">39.5%</td></tr>
+      <tr class="hl"><td>v3.2, post-review</td><td class="n">26.8%</td><td class="n">39.0%</td><td class="n">50.7%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout"><p><b>My honest finding, amended:</b> raw assembly sat <b>flat for ten months</b>. 19.4% in v1, 19.4% in v3.1. Structure improved while my draw odds didn't. Then executing the wish list, Intuition plus Urza's Saga, produced the <b>first assembly gain in this deck's recorded history: 26.8% at T3, up 7.4 points</b>, rising to 50.7% by turn 7. The lattice finally got faster, not just harder to kill:</p></div>
+
+  <h3 class="mh">What actually moved</h3>
+  <table>
+    <thead><tr><th>Structural metric</th><th>v1</th><th>Final</th><th>Δ</th></tr></thead>
+    <tbody>
+      <tr><td>Outlet available once ∞ mana is online</td><td class="n">42.0% (must draw/tutor Brain&nbsp;Freeze)</td><td class="n">100% (Ghost-Spider from command zone)</td><td class="n delta-big">+58pts, structural</td></tr>
+      <tr><td>Win routes sharing ≥1 piece with another route</td><td class="n">0 of 4</td><td class="n">4 of 5</td><td class="n delta-big">disjoint → lattice</td></tr>
+      <tr><td>Spare parts (clones + recursion reaching a lynchpin)</td><td class="n">1 (Sevinne's)</td><td class="n">6 (5 clones + Sevinne's)</td><td class="n delta-up">×6</td></tr>
+      <tr><td>Min. answers to sever all routes for good</td><td class="n">≈5 (one per tower + recursion)</td><td class="n">≥9, and the outlet is unanswerable</td><td class="n delta-big">the sticky delta</td></tr>
+      <tr><td>Breach-line access, T3 (effective copies)</td><td class="n">42.0%</td><td class="n">53.7%, and a resolved Intuition pile is guaranteed access</td><td class="n delta-big">+11.7pts</td></tr>
+    </tbody>
+  </table>
+  <p class="mx">Read together: the deck draws its combo at the rate it always did, but it now <b>keeps</b> what it draws, presents an outlet with probability 1, and forces the table to spend roughly twice the interaction to turn it off. Consistency was v1's inheritance. <b>Stickiness is what I built.</b></p>
+</section>
+
+
+<section id="ledger">
+  <div class="kicker">Part VI</div>
+  <h2>Notable Includes</h2>
+  <p class="lede">The cards that look strange from outside the lattice and load bearing from inside it, each with the role it plays in my 99.</p>
+  <div class="ledger">
+    <div class="lcard"><div class="nm">Patrolling Peacemaker</div><div class="vd">COUNTER ENGINE</div><p>Proliferate ages enemy Remoras; feeds Ghost-Spider, Vivi, Prism.</p></div>
+    <div class="lcard"><div class="nm">Bribery</div><div class="vd">HEIST</div><p>Steals slop bombs; at zero library, fetches an opposing Thoracle to win.</p></div>
+    <div class="lcard"><div class="nm">Hex Magic</div><div class="vd">REFUEL</div><p>Grip of 7 → access to 14; mass exile-play, full trigger suite.</p></div>
+    <div class="lcard"><div class="nm">Delivery Moogle</div><div class="vd">LOOP PIECE</div><p>Kitten loop piece; tutors Scepter, LED, Station.</p></div>
+    <div class="lcard"><div class="nm">Clone suite ×5</div><div class="vd">SPARE PARTS</div><p>Universal spare parts; Flash Photography saves pieces at instant speed.</p></div>
+    <div class="lcard"><div class="nm">Firestorm</div><div class="vd">CONTROL / WINCON</div><p>Surgical board control; Narset's/Flare loops turn it lethal; Breach fuel.</p></div>
+    <div class="lcard"><div class="nm">Pentad Prism</div><div class="vd">FAST MANA</div><p>Unconditional fast mana + filter at 24 lands; Peacemaker refills it.</p></div>
+  </div>
+
+  <div class="wish">
+    <h3 class="mh">The standing wish list</h3>
+    <div class="routes">
+      <div class="rt lat"><span class="dot"></span>1 · Drannith Magistrate: zero self-cost meta hammer vs every Tier 1 command zone<span class="st">first in</span></div>
+      <div class="rt lat"><span class="dot"></span>2 · Shiko, Paragon of the Way: one-card second act; Kitten engine; grindy meta call<span class="st">meta call</span></div>
+      <div class="rt lat"><span class="dot"></span>3 · Nico Minoru: benched ping outlet; first back if my reps miss the exile-cast damage<span class="st">bench</span></div>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap" style="padding:0">
+    <span class="mono">GHOST-SPIDER CODEX · v3.2</span> · 99 earned slots · 24 lands · 19 interaction · 5 routes · 1 unanswerable outlet.<br>
+    Compiled July 2026. Assembly 26.8% at T3, the first gain on my record. Severance cost roughly doubled. Outlet probability 1. My web holds.<br>
+    <a class="dl" href="https://moxfield.com/decks/wQQmV9YgzUiUecNElfOGUA" target="_blank" rel="noopener">Spider Farm on Moxfield ↗</a>
+  </div>
+</footer>
+</div>
+
+<div class="toast" id="toast">Gwen returns to the command zone.</div>
+
+<script>
+(function(){
+  // ---------- data model ----------
+  const R1=340, R2=210, cx=350, cy=360;
+  function pol(r,deg){const a=(deg-90)*Math.PI/180;return [cx+r*Math.cos(a), cy+r*Math.sin(a)];}
+  // lynchpins on inner ring, support on outer ring
+  const lyn=[["SCP","Isochron","Scepter",0],["DRV","Dramatic","Reversal",36],["NAR","Narset's","Reversal",72],["FIR","Firestorm","",108],
+             ["UBR","Underworld","Breach",144],["LED","Lion's Eye","Diamond",180],["BFZ","Brain","Freeze",216],["GST","Grinding","Station",252],
+             ["KIT","Displacer","Kitten",288],["MOO","Delivery","Moogle",324]];
+  const sup=[["MUD","Muddle","tutor",13],["ENT","Enl.Tutor","tutor",39],["MYS","Mys.Tutor","tutor",65],["SPL","Spellseeker","tutor",90],
+             ["INT","Intuition","tutor",116],["SAGA","Urza's Saga","tutor",142],["GAM","Gamble","tutor",167],["GIF","Gifts","tutor",193],
+             ["SEV","Sevinne's","recur",219],["MIR","Mirrormade","clone",244],["MET","Metamorph","clone",270],
+             ["MOK","Mockingbird","clone",296],["IMP","Impersonator","clone",321],["FLP","Flash Photo","clone",347]];
+  const nodes={CMD:{x:cx,y:cy,l1:"GWEN",l2:"command zone",type:"cmd"}};
+  lyn.forEach(([id,a,b,d])=>{const[x,y]=pol(R2,d);nodes[id]={x,y,l1:a,l2:b,type:"lyn"}});
+  sup.forEach(([id,a,t,d])=>{const[x,y]=pol(R1-40,d);nodes[id]={x,y,l1:a,l2:t,type:t}});
+  const tutorCover={MUD:["SCP","DRV","UBR","GST"],ENT:["SCP","LED","UBR","GST"],MYS:["DRV","BFZ","NAR"],
+                    SPL:["DRV","BFZ","NAR"],SAGA:["LED"],
+                    GAM:["SCP","DRV","NAR","FIR","UBR","LED","BFZ","GST","KIT","MOO"],
+                    GIF:["SCP","DRV","NAR","FIR","UBR","LED","BFZ","GST","KIT","MOO"],
+                    INT:["SCP","DRV","NAR","FIR","UBR","LED","BFZ","GST","KIT","MOO"]};
+  const cloneCover={MET:["SCP","GST","LED","KIT","MOO"],MIR:["SCP","GST","LED","UBR"],
+                    MOK:["KIT","MOO"],IMP:["SCP","UBR","LED","GST","KIT","MOO"],
+                    FLP:["SCP","UBR","LED","GST","KIT","MOO"]};
+  const recurCover={SEV:["SCP","UBR","LED","GST"]};
+  const routes=[
+    {id:"r1",name:"Dramatic Scepter — infinite mana & storm",need:["SCP","DRV"]},
+    {id:"r2",name:"Breach loops",need:["UBR","LED"],outlet:["BFZ","GST"]},
+    {id:"r3",name:"Kitten chains",need:["KIT","MOO"]},
+    {id:"r4",name:"Spider engine — play the deck (via R1 + command zone)",need:["SCP","DRV"],cmd:true},
+    {id:"r5",name:"Reversal-Firestorm burn",need:["SCP","NAR","FIR"]}
+  ];
+  const dead=new Set();
+
+  // ---------- render ----------
+  const svg=document.getElementById("web");
+  const NS="http://www.w3.org/2000/svg";
+  function line(x1,y1,x2,y2,cls,id){const p=document.createElementNS(NS,"path");
+    const mx=(x1+x2)/2+(y2-y1)*0.08, my=(y1+y2)/2-(x2-x1)*0.08;
+    p.setAttribute("d",`M${x1},${y1} Q${mx},${my} ${x2},${y2}`);p.setAttribute("class","edge "+cls);p.dataset.k=id;svg.appendChild(p);}
+  // route threads (piece<->piece, and to CMD ring)
+  routes.forEach(r=>{const pts=[...r.need,...(r.outlet||[])];
+    for(let i=0;i<r.need.length;i++)for(let j=i+1;j<r.need.length;j++){
+      line(nodes[r.need[i]].x,nodes[r.need[i]].y,nodes[r.need[j]].x,nodes[r.need[j]].y,"route",r.id);}
+    (r.outlet||[]).forEach(o=>line(nodes[r.need[0]].x,nodes[r.need[0]].y,nodes[o].x,nodes[o].y,"route",r.id));
+    if(r.cmd)r.need.forEach(nn=>line(nodes.CMD.x,nodes.CMD.y,nodes[nn].x,nodes[nn].y,"route",r.id));});
+  const coverEdge=(map,cls)=>Object.entries(map).forEach(([s,ts])=>ts.forEach(t=>line(nodes[s].x,nodes[s].y,nodes[t].x,nodes[t].y,cls,s+"-"+t)));
+  coverEdge(tutorCover,"tut");coverEdge(recurCover,"cln");coverEdge(cloneCover,"cln");
+  // nodes
+  Object.entries(nodes).forEach(([id,n])=>{
+    const g=document.createElementNS(NS,"g");g.setAttribute("class","node "+n.type);g.dataset.id=id;
+    g.setAttribute("transform",`translate(${n.x},${n.y})`);g.setAttribute("tabindex","0");g.setAttribute("role","button");
+    g.setAttribute("aria-label",(n.l1+" "+n.l2).trim());
+    const c=document.createElementNS(NS,"circle");c.setAttribute("r",id==="CMD"?46:32);g.appendChild(c);
+    const t=document.createElementNS(NS,"text");t.setAttribute("y",n.l2?-1:3);t.textContent=n.l1;g.appendChild(t);
+    if(n.l2){const t2=document.createElementNS(NS,"text");t2.setAttribute("y",11);t2.setAttribute("class","sub");t2.textContent=n.l2;g.appendChild(t2);}
+    svg.appendChild(g);
+    const act=()=>{ if(id==="CMD"){toast();return;}
+      dead.has(id)?dead.delete(id):dead.add(id);g.classList.toggle("dead");evaluate();};
+    g.addEventListener("click",act);
+    g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
+  });
+
+  // ---------- logic ----------
+  const available=id=>{
+    if(!dead.has(id))return"live";
+    for(const[t,c]of Object.entries(tutorCover))if(!dead.has(t)&&c.includes(id))return"lat";
+    for(const[t,c]of Object.entries(cloneCover))if(!dead.has(t)&&c.includes(id))return"lat";
+    for(const[t,c]of Object.entries(recurCover))if(!dead.has(t)&&c.includes(id))return"lat";
+    return"sev";};
+  const routesBox=document.getElementById("routes");
+  function evaluate(){
+    let aliveN=0;routesBox.innerHTML="";
+    routes.forEach(r=>{
+      const states=r.need.map(available);
+      let outletOK=true,outletLat=false;
+      if(r.outlet){const os=r.outlet.map(available);outletOK=os.some(s=>s!=="sev");outletLat=outletOK&&!os.includes("live");}
+      let st="live";
+      if(states.includes("sev")||!outletOK)st="sev";
+      else if(states.includes("lat")||outletLat)st="lat";
+      if(r.id==="r4"){/* depends on r1 pieces which are its own needs — CMD outlet always on */}
+      if(st!=="sev")aliveN++;
+      const d=document.createElement("div");d.className="rt "+st;
+      d.innerHTML=`<span class="dot"></span>${r.name}<span class="st">${st==="live"?"standing":st==="lat"?"held by lattice":"severed"}</span>`;
+      routesBox.appendChild(d);});
+    document.getElementById("alive").textContent=aliveN;
+    document.getElementById("spent").textContent=dead.size;
+    document.querySelectorAll(".edge").forEach(e=>{
+      const k=e.dataset.k;let off=false;
+      if(k.startsWith("r")){const r=routes.find(x=>x.id===k);
+        if(r){const sts=r.need.map(available);off=sts.includes("sev")||(r.outlet&&r.outlet.map(available).every(s=>s==="sev"));}}
+      else{const[s,t]=k.split("-");off=dead.has(s);}
+      e.classList.toggle("off",off);});
+  }
+  const tEl=document.getElementById("toast");let tt;
+  function toast(){tEl.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>tEl.classList.remove("show"),1800);}
+  document.getElementById("reset").addEventListener("click",()=>{dead.clear();
+    document.querySelectorAll(".node.dead").forEach(n=>n.classList.remove("dead"));evaluate();});
+  evaluate();
+})();
+</script>
+</body>
+</html>
